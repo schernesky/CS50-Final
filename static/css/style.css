@@ -1,0 +1,218 @@
+/* general */
+body {
+    padding: 10px;
+    background-color: #f8f8f8;
+    color: #333;
+    font-family: 'Courier New', monospace;
+    text-align: center;
+    overflow-y: scroll; /* show scrollbar */
+}
+
+header {
+    margin-bottom: 30px;
+}
+
+h1, h2, h3 {
+    color: #4a4a4a;
+    margin: 15px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+p {
+    margin-top: 30px;
+}
+
+/* links and buttons */
+a, button {
+    background-color: #5a6e51;
+    color: #e9f5e1; 
+    font-size: 14px;
+    font-weight: bold;
+    text-decoration: none;
+    border: 2px solid #465b48; /* button border */
+    border-radius: 8px;
+    padding: 10px 20px;
+    margin: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease; /* hover transitions */
+}
+
+button {
+    background-color: #5a6e51;
+    color: #e9f5e1; 
+    font-size: 14px;
+    font-weight: bold;
+    text-decoration: none;
+    border: 2px solid #465b48;
+    border-radius: 8px;
+    padding: 10px 20px;
+    margin: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+a:hover, button:hover {
+    background-color: #77997d;
+    color: #f1f1f1;
+    border-color: #354e42;
+    transform: scale(1.05); /* bigger (scale-up) on hover */
+}
+
+/* for garden (index) */
+.garden-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 20px auto;
+    max-width: 850px; /* slightly wider */
+    padding: 20px;
+}
+
+/* planter boxes */
+.planter-box {
+    display: inline-block;
+    text-align: center;
+    margin: 30px;
+    width: 180px; /* fixed width */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* shadow */
+}
+
+
+/* box contents */
+.planter-box .box {
+    width: 100%;
+    height: 150px;
+    border: 3px solid #99c2b5;
+    background-color: #f7faf9; /* background for planter */
+    color: #607d7f;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    font-size: 16px;
+    letter-spacing: 0.5px;
+    white-space: pre; /* using \n */
+}
+
+/* plant+water+harvest buttons */
+.planter-box .buttons {
+    display: flex;
+    justify-content: space-evenly;
+    gap: 2px;
+    margin-bottom: 15px;
+}
+
+.planter-box .buttons button {
+    width: 90px;
+    padding: 8px;
+    border-radius: 5px;
+    color: #edf2f4;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.planter-box .buttons button:hover {
+    filter: brightness(0.9);
+    transform: translateY(-3px); /* slightly lift when hovered */
+}
+
+.planter-box .buttons .plant {
+    background-color: #90ac70; /* plant button is green */ 
+}
+
+.planter-box .buttons .water {
+    background-color: #3a8caa; /* water = blue */
+}
+
+.planter-box .buttons .harvest {
+    background-color: #a18651; /* harvest = brown */
+}
+
+
+.inventory {
+    background-color: #fdf8f4;
+    color: #5a4b41;
+}
+
+.journal-entry {
+    background-color: #fffaf1; /* darker color for journal */
+    border: 2px dashed #d3c1a5; /* dashed line */
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 600px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* shadow */
+    position: relative;
+}
+
+.journal-entry h3 {
+    font-family: 'Dancing Script', cursive; /* fancy cursive */
+    font-size: 24px;
+    margin-bottom: 10px;
+    color: #7c5c53;
+}
+
+.journal-entry p {
+    font-family: 'Georgia', serif;
+    font-size: 16px;
+    margin: 10px 0;
+    line-height: 1.6;
+}
+
+.journal-entry::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('https://www.transparenttextures.com/patterns/old-mathematics.png'); /* background texture */
+    opacity: 0.15;
+    pointer-events: none;
+}
+
+
+.shop-grid {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+.shop-grid td {
+    text-align: center;
+    vertical-align: top;
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+.shop-item pre {
+    font-family: monospace;
+    font-size: 12px;
+    white-space: pre;
+}
+.empty-cell {
+    height: 50px;
+    background-color: #f4f4f4;
+}
+
+footer {
+    text-align: center;
+    font-size: 12px;
+    color: #6c757d;
+    padding: 12px 0;
+    border-top: 2px solid #ccc;
+}
+
+/* version number for bottom left */
+#versionNumber {
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    font-size: 10px;
+    color: #888; /* faded color */
+}
+

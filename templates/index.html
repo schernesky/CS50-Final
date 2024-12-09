@@ -1,10 +1,184 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>My Flask App</title>
-    <link rel="stylesheet" type="text/css" href="/static/style.css">
-</head>
-<body>
-    <h1>Welcome to My Flask App!</h1>
-</body>
-</html>
+{% extends "layout.html" %}
+
+{% block title %}
+    Garden
+{% endblock %}
+
+{% block main %}
+<div>
+    <p>Spend some quality time with your plant friends :)</p>
+
+    <!-- dropdown list for plant type -->
+    <label for="plantSelect">Choose a plant:</label>
+    <select id="plantSelect">
+        <option value="--" disabled selected>--</option>
+        <option value="dandelion">Dandelion</option>
+        <option value="daffodil">Daffodil</option>
+        <option value="mushroom">Mushroom</option>
+    </select>
+
+    <div class="garden-container">
+        <!-- planter box 1 -->
+        <div class="planter-box">
+            <div class="box" id="planter1">Empty</div>
+            <div class="buttons">
+                <button class="plant" data-plant="1">Plant</button>
+                <button class="water" data-plant="1">Water</button>
+                <button class="harvest" data-plant="1">Harvest</button>
+            </div>
+        </div>
+
+        <!-- planter box 2 -->
+        <div class="planter-box">
+            <div class="box" id="planter2">Empty</div>
+            <div class="buttons">
+                <button class="plant" data-plant="2">Plant</button>
+                <button class="water" data-plant="2">Water</button>
+                <button class="harvest" data-plant="2">Harvest</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const plantStages = {
+        "dandelion": [
+            "Empty", 
+            ",.,.,.||,.,.,.",
+            "||\n||\n,.,.,\\||/.,.,.",
+            "     _\\/_\\    \n      /\\      \n      ||      \n      || /\\   \n   /\\ ||//\\)  \n  (/\\\\||/\\    \n,.,.,\\||/.,.,.",
+            "     .--.     \n   .'_\\/_.    \n   '. /\\ .'   \n     \"||\"     \n      || /\\   \n   /\\ ||//\\)  \n  (/\\\\||/\\    \n,.,.,\\||/.,.,."
+        ],
+        "daffodil": [
+            "Empty",
+            ".,.,.|.,.,.",
+            "|\n|\n,.,.,|.,.,.",
+            "_ _\n|\n \\ | /\\\n \\|//\n |/\n,.,.,|.,.,.",
+            "_ _\n(_\\_)\n(__<_{})\n (_/_)\\\n|\n \\ | /\\\n \\|//\n |/\n,.,.,|.,.,."
+        ],
+        "mushroom": [
+            "Empty",
+            ".,.,.,(_).,.,.",
+            "(_)\n,.,|/(_)\\|.,.",
+            "* *\n_.-:`:-._\n(_)\n,.\\|/(_)\\|/,.",
+            ".-\"\"\"-.\n/* * * *\\\\\n:_.-:`:-._;\n(_)\n,.\\|/(_)\\|/,."
+        ]
+    };
+
+    document.addEventListener("DOMContentLoaded", () => {
+    let currentStage = 0;
+    let currentPlant = '--';
+    let plant1Stage = 0;
+    let plant2Stage = 0;
+
+    // selecting a new plant
+    plantSelect = document.getElementById('plantSelect');
+    plantSelect.addEventListener('change', (event) => {
+        currentPlant = event.target.value;
+        document.getElementById("planter1").textContent = plantStages[currentPlant][0]; // reset to stage 0
+        document.getElementById("planter2").textContent = plantStages[currentPlant][0];
+    });
+
+    // Plant function
+    document.querySelectorAll(".plant").forEach((button) => {
+        button.addEventListener("click", () => {
+            const plantId = button.getAttribute("data-plant");
+            if (plantId === "1") {
+                plant1Stage = 1;
+                document.getElementById(`planter${plantId}`).textContent = plantStages[currentPlant][plant1Stage];
+            } if (plantId === "2") {
+                plant2Stage = 1;
+                document.getElementById(`planter${plantId}`).textContent = plantStages[currentPlant][plant2Stage];
+            }
+
+            // send request for plant id (1 or 2) and type (dand, daff, mush)
+            fetch('/plant-seed', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    plant_id: plantId,
+                    plant_type: currentPlant
+                })
+            });
+        });
+    });
+
+    // Water function
+    document.querySelectorAll(".water").forEach((button) => {
+        button.addEventListener("click", () => {
+            const plantId = button.getAttribute("data-plant");
+
+            // request info
+            fetch('/water-seed', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    plant_id: plantId,
+                    plant_type: currentPlant
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // increase plant stage
+                    setTimeout(() => {
+                        if (plantId === "1" && plant1Stage < 4) {
+                            plant1Stage++;
+                            document.getElementById(`planter${plantId}`).textContent = plantStages[currentPlant][plant1Stage];
+                        } else if (plantId === "2" && plant2Stage < 4) {
+                            plant2Stage++;
+                            document.getElementById(`planter${plantId}`).textContent = plantStages[currentPlant][plant2Stage];
+                        }
+                    }, 2000);  // 2 second (2000ms) delay
+                }
+                else {
+                    console.error('Watering failed:', data.message);
+                }
+            });
+        });
+
+        // Harvest function
+        document.querySelectorAll(".harvest").forEach((button) => {
+            button.addEventListener("click", () => {
+                const plantId = button.getAttribute("data-plant");
+
+                // request info
+                fetch('/harvest-seed', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        plant_id: plantId,
+                        plant_type: currentPlant
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // reset plant stage if fully grown
+                        if (plantId === "1") {
+                            plant1Stage = 0;
+                            document.getElementById(`planter${plantId}`).textContent = plantStages[currentPlant][plant1Stage];
+                        } else if (plantId === "2") {
+                            plant2Stage = 0;
+                            document.getElementById(`planter${plantId}`).textContent = plantStages[currentPlant][plant2Stage];
+                        }
+                        alert(data.message); // success message
+                    } else {
+                        alert('Harvesting failed: ' + data.error);
+                    }
+                });
+            });
+        });
+    });
+});
+
+
+</script>
+
+{% endblock %}

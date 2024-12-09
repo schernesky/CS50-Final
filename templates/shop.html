@@ -1,0 +1,68 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    shop
+{% endblock %}
+
+{% block main %}
+<div>
+    <p>Display your plant friends!</p>
+    
+    <table class="shop-grid">
+        {% for row in grid %}
+            <tr>
+                {% for cell in row %}
+                    <td class="shop-item" 
+                        {% if cell %}
+                            draggable="true" 
+                            ondragstart="handleDragStart(event)" 
+                            ondragover="handleDragOver(event)" 
+                            ondrop="handleDrop(event)"
+                        {% else %}
+                            ondragover="handleDragOver(event)" 
+                            ondrop="handleDrop(event)"
+                        {% endif %}
+                        >
+                        {% if cell %}
+                            <pre>{{ cell }}</pre>
+                        {% else %}
+                            <div class="empty-cell"></div>
+                        {% endif %}
+                    </td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+</div>
+
+<script>
+    //drag and drop script
+    
+    let draggedItem = null; // store data
+
+    // drag
+    function handleDragStart(event) {
+        draggedItem = event.target;
+        event.dataTransfer.setData('text/plain', event.target.innerHTML);
+    }
+
+    function handleDragOver(event) {
+        event.preventDefault(); // enable drop
+    }
+
+    // drop
+    function handleDrop(event) {
+        event.preventDefault();
+
+        // swap items
+        if (draggedItem && event.target.tagName === 'TD') {
+            const draggedHTML = draggedItem.innerHTML;
+            draggedItem.innerHTML = event.target.innerHTML;
+            event.target.innerHTML = draggedHTML;
+
+            // reset draggedItem (not holding anything)
+            draggedItem = null;
+        }
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    inventory
+{% endblock %}
+
+{% block main %}
+<div class="inventory">
+    <div class="journal-entry">
+        <h3>Dandelions</h3>
+        <p>You have {{ inventory.dandelion_amount }} bright and cheerful dandelions.</p>
+        <button onclick="sendToShop('dandelion')">Send one to the Shop</button>
+    </div>
+    <div class="journal-entry">
+        <h3>Daffodils</h3>
+        <p>You have {{ inventory.daffodil_amount }} elegant and sunny daffodils.</p>
+        <button onclick="sendToShop('daffodil')">Send one to the Shop</button>
+    </div>
+    <div class="journal-entry">
+        <h3>Mushrooms</h3>
+        <p>You have {{ inventory.mushroom_amount }} mysterious and magical mushrooms.</p>
+        <button onclick="sendToShop('mushroom')">Send one to the Shop</button>
+    </div>
+</div>
+
+<script>
+    function sendToShop(plantType) {
+        fetch("/send-to-shop", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ plant_type: plantType })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(`Sent one ${plantType} to the shop!`);
+                location.reload(); // reload to update
+            } else {
+                alert(data.error || "Failed to send plant to the shop.");
+            }
+        })
+        .catch(err => console.error("Error:", err));
+    }
+</script>
+{% endblock %}
+

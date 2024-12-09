@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <header>
+        <h1>
+            &#10048; Leaf Me Alone: Virtual Garden &#10048;
+        </h1>
+    </header>
+    <nav>
+        <a href="/">Garden</a>
+        <a href="/inventory">Inventory</a>
+        <a href="/shop">Shop</a>
+        <a style="text-align: right;" href="/login">Log In</a>
+        <a style="text-align: right;" href="/register">Register</a>
+    </nav>
+    <main>
+        {% block main %}
+        {% endblock %}
+    </main>
+    <footer>
+        <p>sascha's virtual garden &lt;3</p>
+    </footer>
+    <div id="versionNumber">
+        Version 1.0.0
+    </div>
+</body>
+</html>
